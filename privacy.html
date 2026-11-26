@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy e Cookie Policy — gengis.it</title>
+  <link rel="preconnect" href="https://googleapis.com">
+  <link rel="preconnect" href="https://gstatic.com" crossorigin>
+  <link href="https://googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-page: #FAF6F0;
+      --bg-card: #FFFFFF;
+      --bg-subtle: #F1EBE1;
+      --text-main: #1C1917;
+      --text-muted: #57534E;
+      --border-color: #E7E0D5;
+      --accent: #B45309;
+      --accent-soft: rgba(180, 83, 9, 0.12);
+    }
+
+    html.dark {
+      --bg-page: #141210;
+      --bg-card: #1E1B18;
+      --bg-subtle: #292521;
+      --text-main: #F5F5F4;
+      --text-muted: #A8A29E;
+      --border-color: #2E2924;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      line-height: 1.65;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: background-color 0.35s ease, color 0.3s ease;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+    .container { width: 100%; max-width: 960px; margin: 0 auto; padding: 0 20px; }
+    .icon-sm { width: 15px; height: 15px; flex-shrink: 0; }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background-color: var(--bg-card);
+      border-bottom: 1px solid var(--border-color);
+      backdrop-filter: blur(10px);
+    }
+    .header-inner {
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .brand-group { display: flex; align-items: center; gap: 12px; }
+    .logo {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--text-main);
+    }
+    .logo-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background-color: var(--accent);
+      display: inline-block;
+    }
+    .logo span.ext { color: var(--accent); }
+
+    .pill-doc {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background-color: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    .header-actions { display: flex; align-items: center; gap: 8px; }
+    .btn-theme {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-card);
+      color: var(--text-main);
+      font-size: 12px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: border-color 0.2s;
+    }
+    .btn-theme:hover { border-color: var(--accent); }
+
+    main {
+      flex: 1;
+      padding: 32px 0 52px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .nav-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .nav-buttons { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 14px;
+      border-radius: 12px;
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      font-size: 13px;
+      font-weight: 700;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-back:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-home {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 15px;
+      border-radius: 12px;
+      background-color: var(--accent);
+      color: #FFFFFF;
+      font-size: 13px;
+      font-weight: 700;
+      transition: opacity 0.2s;
+    }
+    .btn-home:hover { opacity: 0.92; }
+
+    .doc-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 22px;
+      padding: 30px;
+      box-shadow: 0 10px 26px rgba(0,0,0,0.05);
+    }
+    .doc-title {
+      font-size: clamp(22px, 3vw, 30px);
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      line-height: 1.2;
+      margin-bottom: 18px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .doc-body {
+      white-space: pre-line;
+      font-size: 14px;
+      color: var(--text-main);
+    }
+
+    footer {
+      border-top: 1px solid var(--border-color);
+      padding: 20px 0;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+    .footer-links a:hover { color: var(--accent); text-decoration: underline; }
+
+    @media (max-width: 720px) {
+      .pill-doc { display: none; }
+      .doc-card { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container header-inner">
+      <div class="brand-group">
+        <a href="index.html" class="logo">
+          <span class="logo-dot"></span>
+          <span>gengis<span class="ext">.it</span></span>
+        </a>
+        <span class="pill-doc">Privacy & Cookie Policy</span>
+      </div>
+
+      <div class="header-actions">
+        <button id="theme-toggle" class="btn-theme" aria-label="Cambia modalità giorno notte">
+          <svg id="theme-icon" class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <span id="theme-label">Notte</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="nav-bar">
+      <div class="nav-buttons">
+        <button type="button" onclick="goBackPage()" class="btn-back">
+          <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+          <span>Torna alla pagina precedente</span>
+        </button>
+        <a href="index.html" class="btn-home">Vai alla Homepage</a>
+      </div>
+    </div>
+
+    <article class="doc-card">
+      <h1 class="doc-title">Privacy e Cookie Policy</h1>
+      <div class="doc-body">INFORMATIVA SUL TRATTAMENTO DEI DATI PERSONALI
+(Ai sensi dell'art. 13 del Regolamento UE 2016/679 - GDPR)
+1. Titolare del Trattamento
+Il Titolare del trattamento dei dati personali raccolti tramite il portale gengis.it è [Tuo Nome e Cognome], con sede/residenza in [Tuo Comune/Indirizzo, es. Città di Castello (PG)], email di contatto: [privacy@gengis.it o tua email].
+2. Tipologia di dati raccolti e principio di minimizzazione
+gengis.it è progettato per tutelare l'identità degli utenti riducendo al minimo i dati personali richiesti:
+• Dati di registrazione (Account): Il portale richiede esclusivamente un nickname (che può essere totalmente di fantasia e sarà l'unico elemento visibile pubblicamente accanto agli annunci), una password (conservata in forma criptata) e un indirizzo email (che resta strettamente privato e non viene mai mostrato agli altri utenti).
+• Dati contenuti negli annunci: Testi, fotografie e informazioni inserite volontariamente dall'utente nelle varie sezioni del portale (es. immobili/locali e altre categorie disponibili). Si invita l'utente a non inserire dati personali propri o di terzi nel testo pubblico qualora desideri mantenere l'anonimato.
+• Dati di contatto (Messaggi): In caso di utilizzo del modulo di contatto per rispondere a un annuncio, vengono trattati il nickname/nome, l'indirizzo email del mittente e il testo del messaggio al solo fine di inoltrarli all'inserzionista.
+• Dati tecnici di navigazione: Indirizzi IP e log di sistema raccolti automaticamente dall'infrastruttura informatica per motivi di sicurezza e corretto funzionamento del sito.
+3. Finalità e Base Giuridica del Trattamento
+I dati personali sono raccolti in un unico database protetto e trattati per le seguenti finalità:
+• a) Erogazione dei servizi del portale (Obbligatoria): Gestire l'account utente, pubblicare gli annunci e consentire l'inoltro privato dei messaggi tra utenti interessati alle offerte o richieste pubblicate. (Base giuridica: esecuzione di un servizio richiesto dall'interessato, art. 6.1.b GDPR).
+• b) Sicurezza e prevenzione degli abusi (Obbligatoria): Garantire la sicurezza della piattaforma, prevenire attività illecite, spam o truffe e adempiere a eventuali obblighi di legge. (Base giuridica: legittimo interesse del Titolare e obbligo di legge, art. 6.1.f e 6.1.c GDPR).
+• c) Aggiornamenti sugli altri servizi del portale (Facoltativa): Solo previo consenso esplicito e separato dell'utente (espresso tramite apposita casella facoltativa in fase di registrazione), l'indirizzo email potrà essere utilizzato dal Titolare per inviare notifiche, novità o comunicazioni riguardanti tutte le altre sezioni e i servizi attivi o futuri di gengis.it. (Base giuridica: consenso dell'interessato, art. 6.1.a GDPR).
+I dati raccolti non saranno mai venduti, affittati o ceduti a terzi per finalità commerciali o pubblicitarie.
+4. Modalità di trattamento e tempi di conservazione
+I dati sono trattati con strumenti informatici protetti da misure di sicurezza adeguate (protocollo di cifratura HTTPS e database protetto).
+• Account e Annunci: I dati dell'account e l'email associata vengono conservati finché l'utente mantiene attivo il proprio profilo su gengis.it. I singoli annunci rimangono online per [es. 90] giorni (salvo rinnovo o rimozione anticipata da parte dell'utente). In caso di cancellazione dell'account da parte dell'utente, tutti i dati personali vengono eliminati definitivamente dai sistemi entro [es. 7/15] giorni (salvo obblighi di legge legati a segnalazioni di illeciti).
+• Messaggi di contatto: I messaggi inviati tramite i moduli del sito vengono inoltrati all'email dell'inserzionista per permettere lo scambio diretto tra le parti e non vengono conservati permanentemente dal portale.
+• Consenso facoltativo (punto 3.c): Resta valido fino alla revoca da parte dell'utente, esercitabile in qualsiasi momento con un clic o scrivendo al Titolare.
+5. Destinatari dei dati e trasferimento extra-UE
+I dati non sono diffusi pubblicamente (fatta eccezione per il nickname e il contenuto dell'annuncio scelto dall'utente). Possono avere accesso tecnico ai dati esclusivamente i fornitori di servizi infrastrutturali (es. società di hosting [Nome del tuo Hosting]) nominati Responsabili del Trattamento ai sensi dell'art. 28 GDPR. I server su cui risiede gengis.it sono ubicati all'interno dello Spazio Economico Europeo (SEE).
+6. Diritti dell'Interessato
+Ai sensi degli articoli 15-22 del GDPR, l'utente ha il diritto di accedere ai propri dati, chiederne la rettifica, la cancellazione (diritto all'oblio), la limitazione del trattamento o revocare il consenso precedentemente prestato. Per esercitare tali diritti è sufficiente scrivere a [privacy@gengis.it o tua email]. L'utente ha inoltre il diritto di proporre reclamo al Garante per la Protezione dei Dati Personali (www.garanteprivacy.it).
+7. Informativa sui Cookie (Cookie Policy)
+gengis.it utilizza esclusivamente cookie tecnici e di sessione strettamente necessari al corretto funzionamento del sito, alla gestione dell'autenticazione degli utenti (login tramite nickname/email) e alla sicurezza dei moduli di contatto.
+• Nessuna profilazione: Questo portale non utilizza cookie pubblicitari, di profilazione né strumenti di tracciamento di terze parti a fini commerciali.
+• Consenso: In conformità alle Linee Guida del Garante per la Protezione dei Dati Personali, per l'installazione dei soli cookie tecnici non è richiesto il consenso preventivo dell'utente tramite banner. L'utente può comunque disabilitare o cancellare i cookie in qualsiasi momento tramite le impostazioni del proprio browser (tenendo presente che la disattivazione dei cookie tecnici potrebbe impedire l'accesso all'area riservata).</div>
+    </article>
+
+    <div class="nav-bar">
+      <div class="nav-buttons">
+        <button type="button" onclick="goBackPage()" class="btn-back">← Torna alla pagina precedente</button>
+        <a href="index.html" class="btn-home">Vai alla Homepage</a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <div class="footer-links">
+        <strong>gengis.it</strong>
+        <span>•</span>
+        <a href="privacy.html">Privacy e Cookie Policy</a>
+        <span>•</span>
+        <a href="termini.html">Termini d'Uso</a>
+        <span>•</span>
+        <a href="contatti-segnalazioni.html">Contatti / Segnalazioni</a>
+      </div>
+      <div><a href="index.html" style="color:var(--accent); font-weight:600;">Homepage →</a></div>
+    </div>
+  </footer>
+<script>
+    const themeBtn = document.getElementById('theme-toggle');
+    const themeLabel = document.getElementById('theme-label');
+    const themeIcon = document.getElementById('theme-icon');
+
+    function updateThemeUI(isDark) {
+      themeLabel.textContent = isDark ? 'Giorno' : 'Notte';
+      themeIcon.innerHTML = isDark
+        ? '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>'
+        : '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+    }
+
+    themeBtn.addEventListener('click', () => {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('gengis-theme', isDark ? 'dark' : 'light');
+      updateThemeUI(isDark);
+    });
+
+    function goBackPage() {
+      if (window.history.length > 1 && document.referrer) {
+        window.history.back();
+      } else {
+        window.location.href = 'index.html';
+      }
+    }
+
+    if (localStorage.getItem('gengis-theme') === 'dark') {
+      document.documentElement.classList.add('dark');
+    }
+    updateThemeUI(document.documentElement.classList.contains('dark'));
+  </script>
+</body>
+</html>

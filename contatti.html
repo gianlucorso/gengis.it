@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contatti / Segnalazioni — gengis.it</title>
+  <link rel="preconnect" href="https://googleapis.com">
+  <link rel="preconnect" href="https://gstatic.com" crossorigin>
+  <link href="https://googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-page: #FAF6F0;
+      --bg-card: #FFFFFF;
+      --bg-subtle: #F1EBE1;
+      --text-main: #1C1917;
+      --text-muted: #57534E;
+      --border-color: #E7E0D5;
+      --accent: #B45309;
+      --accent-soft: rgba(180, 83, 9, 0.12);
+    }
+
+    html.dark {
+      --bg-page: #141210;
+      --bg-card: #1E1B18;
+      --bg-subtle: #292521;
+      --text-main: #F5F5F4;
+      --text-muted: #A8A29E;
+      --border-color: #2E2924;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      line-height: 1.65;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: background-color 0.35s ease, color 0.3s ease;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+    .container { width: 100%; max-width: 960px; margin: 0 auto; padding: 0 20px; }
+    .icon-sm { width: 15px; height: 15px; flex-shrink: 0; }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background-color: var(--bg-card);
+      border-bottom: 1px solid var(--border-color);
+      backdrop-filter: blur(10px);
+    }
+    .header-inner {
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .brand-group { display: flex; align-items: center; gap: 12px; }
+    .logo {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--text-main);
+    }
+    .logo-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background-color: var(--accent);
+      display: inline-block;
+    }
+    .logo span.ext { color: var(--accent); }
+
+    .pill-doc {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background-color: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    .header-actions { display: flex; align-items: center; gap: 8px; }
+    .btn-theme {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-card);
+      color: var(--text-main);
+      font-size: 12px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: border-color 0.2s;
+    }
+    .btn-theme:hover { border-color: var(--accent); }
+
+    main {
+      flex: 1;
+      padding: 32px 0 52px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .nav-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .nav-buttons { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 14px;
+      border-radius: 12px;
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      font-size: 13px;
+      font-weight: 700;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-back:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-home {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 15px;
+      border-radius: 12px;
+      background-color: var(--accent);
+      color: #FFFFFF;
+      font-size: 13px;
+      font-weight: 700;
+      transition: opacity 0.2s;
+    }
+    .btn-home:hover { opacity: 0.92; }
+
+    .doc-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 22px;
+      padding: 30px;
+      box-shadow: 0 10px 26px rgba(0,0,0,0.05);
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .doc-title {
+      font-size: clamp(22px, 3vw, 30px);
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      line-height: 1.2;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .doc-card p { font-size: 14px; color: var(--text-main); }
+    .doc-card p.muted { color: var(--text-muted); }
+
+    .mail-box {
+      background-color: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 18px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+    .mail-label { font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.6px; }
+    .mail-address { font-size: 17px; font-weight: 800; color: var(--accent); }
+    .btn-mail {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 12px;
+      background-color: var(--accent);
+      color: #FFFFFF;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .btn-mail:hover { opacity: 0.92; }
+
+    .info-list {
+      padding-left: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 14px;
+      color: var(--text-main);
+    }
+
+    footer {
+      border-top: 1px solid var(--border-color);
+      padding: 20px 0;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+    .footer-links a:hover { color: var(--accent); text-decoration: underline; }
+
+    @media (max-width: 720px) {
+      .pill-doc { display: none; }
+      .doc-card { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container header-inner">
+      <div class="brand-group">
+        <a href="index.html" class="logo">
+          <span class="logo-dot"></span>
+          <span>gengis<span class="ext">.it</span></span>
+        </a>
+        <span class="pill-doc">Contatti / Segnalazioni</span>
+      </div>
+
+      <div class="header-actions">
+        <button id="theme-toggle" class="btn-theme" aria-label="Cambia modalità giorno notte">
+          <svg id="theme-icon" class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <span id="theme-label">Notte</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="nav-bar">
+      <div class="nav-buttons">
+        <button type="button" onclick="goBackPage()" class="btn-back">
+          <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+          <span>Torna alla pagina precedente</span>
+        </button>
+        <a href="index.html" class="btn-home">Vai alla Homepage</a>
+      </div>
+    </div>
+
+    <article class="doc-card">
+      <h1 class="doc-title">Contatti e Segnalazioni</h1>
+
+      <p>
+        Gentile Utente, il presente canale è dedicato alle comunicazioni formali con la gestione del portale <strong>gengis.it</strong>. Invitiamo visitatori, titolari di attività, organizzatori di eventi e professionisti a scrivere al gestore del servizio per qualsiasi necessità relativa all'utilizzo della piattaforma, alla tutela della correttezza degli annunci o alla collaborazione sul territorio.
+      </p>
+
+      <div class="mail-box">
+        <div>
+          <div class="mail-label">Casella di posta ufficiale del portale</div>
+          <div class="mail-address">info@gengis.it</div>
+        </div>
+        <a href="mailto:info@gengis.it" class="btn-mail">Scrivi a info@gengis.it →</a>
+      </div>
+
+      <p>
+        In particolare, La invitiamo a contattare il gestore del servizio nei seguenti casi:
+      </p>
+
+      <ul class="info-list">
+        <li><strong>Segnalazione di abusi o contenuti non conformi:</strong> per segnalare annunci ritenuti ingannevoli, falsi, lesivi dei diritti di terzi, non rispettosi dei Termini d'Uso o contenenti dati personali non autorizzati.</li>
+        <li><strong>Richieste relative al trattamento dei dati personali:</strong> per esercitare i diritti previsti dal Regolamento UE 2016/679 (GDPR), richiedere chiarimenti sull'informativa o domandare la verifica e rimozione di informazioni.</li>
+        <li><strong>Supporto tecnico e informazioni sul funzionamento:</strong> per comunicare eventuali anomalie riscontrate durante la navigazione, la registrazione o l'uso delle funzionalità del portale.</li>
+        <li><strong>Proposte di rete, collaborazioni territoriali e sponsorizzazioni:</strong> per richiedere informazioni sull'attivazione di iniziative locali, partnership o spazi dedicati alle realtà del territorio.</li>
+      </ul>
+
+      <p class="muted">
+        Per agevolare una corretta presa in carico della comunicazione, si prega di indicare nell'oggetto dell'email il motivo del contatto e, in caso di segnalazione, il nickname dell'inserzionista o i riferimenti essenziali dell'annuncio oggetto di verifica.
+      </p>
+    </article>
+
+    <div class="nav-bar">
+      <div class="nav-buttons">
+        <button type="button" onclick="goBackPage()" class="btn-back">← Torna alla pagina precedente</button>
+        <a href="index.html" class="btn-home">Vai alla Homepage</a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <div class="footer-links">
+        <strong>gengis.it</strong>
+        <span>•</span>
+        <a href="privacy.html">Privacy e Cookie Policy</a>
+        <span>•</span>
+        <a href="termini.html">Termini d'Uso</a>
+        <span>•</span>
+        <a href="contatti-segnalazioni.html">Contatti / Segnalazioni</a>
+      </div>
+      <div><a href="index.html" style="color:var(--accent); font-weight:600;">Homepage →</a></div>
+    </div>
+  </footer>
+<script>
+    const themeBtn = document.getElementById('theme-toggle');
+    const themeLabel = document.getElementById('theme-label');
+    const themeIcon = document.getElementById('theme-icon');
+
+    function updateThemeUI(isDark) {
+      themeLabel.textContent = isDark ? 'Giorno' : 'Notte';
+      themeIcon.innerHTML = isDark
+        ? '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>'
+        : '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+    }
+
+    themeBtn.addEventListener('click', () => {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('gengis-theme', isDark ? 'dark' : 'light');
+      updateThemeUI(isDark);
+    });
+
+    function goBackPage() {
+      if (window.history.length > 1 && document.referrer) {
+        window.history.back();
+      } else {
+        window.location.href = 'index.html';
+      }
+    }
+
+    if (localStorage.getItem('gengis-theme') === 'dark') {
+      document.documentElement.classList.add('dark');
+    }
+    updateThemeUI(document.documentElement.classList.contains('dark'));
+  </script>
+</body>
+</html>

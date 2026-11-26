@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bacheca Immobili — gengis.it</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-page: #FAF6F0;
+      --bg-card: #FFFFFF;
+      --bg-subtle: #F1EBE1;
+      --text-main: #1C1917;
+      --text-muted: #57534E;
+      --border-color: #E7E0D5;
+      --accent: #B45309;
+      --accent-soft: rgba(180, 83, 9, 0.12);
+    }
+
+    html.dark {
+      --bg-page: #141210;
+      --bg-card: #1E1B18;
+      --bg-subtle: #292521;
+      --text-main: #F5F5F4;
+      --text-muted: #A8A29E;
+      --border-color: #2E2924;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: background-color 0.35s ease, color 0.3s ease;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    button, input, select, textarea { font-family: inherit; }
+    button { cursor: pointer; border: none; background: none; }
+
+    .container { width: 100%; max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+    .icon-sm { width: 15px; height: 15px; flex-shrink: 0; }
+    .icon-md { width: 22px; height: 22px; flex-shrink: 0; }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background-color: var(--bg-card);
+      border-bottom: 1px solid var(--border-color);
+      backdrop-filter: blur(10px);
+    }
+    .header-inner {
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .brand-group { display: flex; align-items: center; gap: 10px; }
+    .logo {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--text-main);
+    }
+    .logo-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background-color: var(--accent);
+      display: inline-block;
+    }
+    .logo span.ext { color: var(--accent); }
+
+    .pill-area {
+      font-size: 12px;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background-color: var(--bg-subtle);
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .header-actions { display: flex; align-items: center; gap: 8px; }
+    .pill-season {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 999px;
+      background-color: var(--accent-soft);
+      color: var(--accent);
+    }
+    .btn-account {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--accent);
+      background-color: var(--accent-soft);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .btn-cta-nav {
+      padding: 6px 13px;
+      border-radius: 999px;
+      background-color: var(--accent);
+      color: #FFFFFF;
+      font-size: 12px;
+      font-weight: 700;
+      transition: opacity 0.2s;
+    }
+    .btn-cta-nav:hover { opacity: 0.9; }
+    .btn-theme {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-card);
+      color: var(--text-main);
+      font-size: 12px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: border-color 0.2s;
+    }
+    .btn-theme:hover { border-color: var(--accent); }
+main {
+      flex: 1;
+      padding: 28px 0 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .hero-box {
+      position: relative;
+      border-radius: 24px;
+      overflow: hidden;
+      min-height: 440px;
+      background-color: #181512;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 32px;
+      color: #FFFFFF;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.16);
+    }
+    .season-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      display: none;
+      pointer-events: none;
+    }
+    .season-svg.active { display: block; }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: linear-gradient(to top, rgba(10,9,8,0.84) 12%, rgba(10,9,8,0.24) 55%, rgba(10,9,8,0.2) 100%);
+      pointer-events: none;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      gap: 28px;
+    }
+    .hero-top {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .event-badge {
+      font-size: 12px;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.48);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.24);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .live-dot { width: 7px; height: 7px; border-radius: 50%; background-color: #34D399; }
+    .btn-refresh {
+      font-size: 12px;
+      color: #F5F5F4;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.48);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.24);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-refresh:hover { background: rgba(0,0,0,0.72); }
+
+    .hero-headline h1 {
+      font-size: clamp(24px, 3.6vw, 38px);
+      font-weight: 800;
+      line-height: 1.2;
+      max-width: 760px;
+      letter-spacing: -0.5px;
+      text-shadow: 0 2px 14px rgba(0,0,0,0.65);
+    }
+    .hero-headline p {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #F5F5F4;
+      text-shadow: 0 1px 8px rgba(0,0,0,0.65);
+    }
+    .choice-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+    .choice-card {
+      background-color: var(--bg-card);
+      color: var(--text-main);
+      border-radius: 18px;
+      padding: 22px 24px;
+      border: 2px solid transparent;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.22);
+    }
+    .choice-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .choice-label {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--accent);
+    }
+    .choice-card h2 { font-size: 19px; font-weight: 800; margin: 4px 0 6px; }
+    .choice-card p { font-size: 13px; color: var(--text-muted); }
+    .choice-icon-box {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background-color: var(--accent-soft);
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .metric-box {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .metric-val {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1.1;
+    }
+    .metric-lbl {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+    .metric-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .ticker-bar {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 13px;
+    }
+    .ticker-left { display: flex; align-items: center; gap: 10px; overflow: hidden; }
+    .ticker-tag {
+      background-color: var(--accent);
+      color: #FFF;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+    .ticker-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 500; }
+    .ticker-note { font-size: 12px; color: var(--text-muted); flex-shrink: 0; }
+.section-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .section-head h3 { font-size: 19px; font-weight: 800; }
+    .section-head p { font-size: 13px; color: var(--text-muted); }
+
+    .filter-group {
+      display: inline-flex;
+      flex-wrap: wrap;
+      background-color: var(--bg-subtle);
+      padding: 4px;
+      border-radius: 10px;
+      gap: 4px;
+    }
+    .filter-btn {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 8px;
+      color: var(--text-muted);
+    }
+    .filter-btn.active {
+      background-color: var(--bg-card);
+      color: var(--text-main);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 18px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .card.is-covered { opacity: 0.72; border-style: dashed; }
+    .card-sponsor {
+      background-color: var(--bg-subtle);
+      border: 1px dashed var(--accent);
+    }
+    .card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .tag-role {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background-color: var(--accent-soft);
+      color: var(--accent);
+    }
+    .tag-covered {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background-color: rgba(21, 128, 61, 0.14);
+      color: #15803D;
+    }
+    html.dark .tag-covered { color: #4ADE80; }
+    .tag-sponsor {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background-color: var(--text-main);
+      color: var(--bg-card);
+    }
+    .card-time { font-size: 12px; color: var(--text-muted); }
+    .nick-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent);
+      background-color: var(--accent-soft);
+      padding: 3px 9px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+    .nick-badge:hover { text-decoration: underline; }
+    .card h4 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+    .card p { font-size: 13px; color: var(--text-muted); }
+    .price-pill {
+      display: inline-block;
+      margin-top: 8px;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--text-main);
+      background-color: var(--bg-subtle);
+      padding: 4px 10px;
+      border-radius: 8px;
+    }
+    .card-foot {
+      padding-top: 12px;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 12px;
+    }
+    .card-actions { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+    .btn-close-offer {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 9px;
+      border-radius: 7px;
+      background-color: var(--bg-subtle);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+    }
+    .btn-close-offer:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+    .btn-close-offer:disabled { opacity: 0.75; cursor: default; }
+    .btn-del-offer {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 7px;
+      background-color: rgba(185, 28, 28, 0.12);
+      color: #B91C1C;
+    }
+    html.dark .btn-del-offer { color: #F87171; }
+    .card-link { font-weight: 700; color: var(--accent); }
+    .card-link:hover { text-decoration: underline; }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(4px);
+      z-index: 120;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal-box {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 22px;
+      width: 100%;
+      max-width: 480px;
+      padding: 24px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+      max-height: 92vh;
+      overflow-y: auto;
+    }
+    .modal-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .modal-head h3 { font-size: 19px; font-weight: 800; }
+    .modal-close { font-size: 20px; color: var(--text-muted); padding: 4px 8px; }
+    .tab-switch {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      background-color: var(--bg-subtle);
+      padding: 4px;
+      border-radius: 12px;
+      margin-bottom: 16px;
+    }
+    .tab-btn {
+      padding: 8px;
+      border-radius: 9px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+    .tab-btn.active {
+      background-color: var(--bg-card);
+      color: var(--accent);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .modal-form { display: flex; flex-direction: column; gap: 12px; }
+    .modal-form label.field-lbl { font-size: 12px; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 4px; }
+    .modal-input {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      font-size: 13px;
+    }
+    .forgot-link-row { display: flex; justify-content: flex-end; margin-top: 4px; }
+    .btn-forgot { font-size: 12px; font-weight: 700; color: var(--accent); }
+    .btn-forgot:hover { text-decoration: underline; }
+    .reset-feedback {
+      background-color: var(--accent-soft);
+      border: 1px solid var(--accent);
+      color: var(--text-main);
+      border-radius: 12px;
+      padding: 11px 13px;
+      font-size: 12px;
+      line-height: 1.45;
+      display: none;
+    }
+    .check-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.4;
+      cursor: pointer;
+    }
+    .check-row input[type="checkbox"] {
+      margin-top: 2px;
+      accent-color: var(--accent);
+      width: 15px;
+      height: 15px;
+      flex-shrink: 0;
+    }
+    .check-row a { color: var(--accent); font-weight: 700; text-decoration: underline; }
+    .modal-submit {
+      margin-top: 6px;
+      background-color: var(--accent);
+      color: #FFFFFF;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 11px;
+      border-radius: 10px;
+    }
+    .privacy-note-box {
+      background-color: var(--bg-subtle);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+
+    footer {
+      border-top: 1px solid var(--border-color);
+      padding: 20px 0;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .footer-links { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+    .footer-links a:hover { color: var(--accent); text-decoration: underline; }
+    .season-tester {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background-color: var(--bg-card);
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border-color);
+    }
+    .season-tester button {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 999px;
+      color: var(--text-main);
+    }
+    .season-tester button:hover { background-color: var(--bg-subtle); }
+
+    @media (max-width: 820px) {
+      .choice-grid, .cards-grid { grid-template-columns: 1fr; }
+      .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+      .hero-box { padding: 22px; min-height: auto; }
+      .pill-area, .ticker-note, .pill-season { display: none; }
+    }
+  </style>
+</head>
+<body>
+<header>
+    <div class="container header-inner">
+      <div class="brand-group">
+        <a href="../index.html" class="logo" title="Home gengis.it">
+          <span class="logo-dot"></span>
+          <span>gengis<span class="ext">.it</span></span>
+        </a>
+        <a href="../index.html" class="pill-area">← Home</a>
+        <span class="pill-area">
+          <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Bacheca Immobili
+        </span>
+      </div>
+
+      <div class="header-actions">
+        <span id="season-badge" class="pill-season">Autunno • Casa & Territorio</span>
+        <button id="auth-nav-btn" onclick="openAuthModal('register')" class="btn-account">Registrati / Accedi</button>
+        <button onclick="openPublishModal('offerta')" class="btn-cta-nav">+ Pubblica Annuncio</button>
+        <button id="theme-toggle" class="btn-theme" aria-label="Cambia modalità giorno notte">
+          <svg id="theme-icon" class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <span id="theme-label">Notte</span>
+        </button>
+      </div>
+    </div>
+  </header>
+<main class="container">
+    <section id="hero-box" class="hero-box">
+      <svg id="art-autunno" class="season-svg active" viewBox="0 0 1200 500" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <linearGradient id="gAut" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#451a03"/>
+            <stop offset="50%" stop-color="#9a3412"/>
+            <stop offset="100%" stop-color="#1c120c"/>
+          </linearGradient>
+        </defs>
+        <rect width="1200" height="500" fill="url(#gAut)"/>
+        <path d="M0 370 Q280 290 600 350 T1200 310 L1200 500 L0 500 Z" fill="#291208" opacity="0.72"/>
+        <path d="M0 420 Q420 370 820 410 T1200 380 L1200 500 L0 500 Z" fill="#170a05" opacity="0.88"/>
+        <g transform="translate(860, 95)" opacity="0.9">
+          <path d="M20 110 L105 42 L190 110 V205 H20 Z" fill="#f59e0b" opacity="0.25" stroke="#fde68a" stroke-width="5"/>
+          <rect x="85" y="140" width="40" height="65" fill="none" stroke="#fde68a" stroke-width="4"/>
+        </g>
+      </svg>
+
+      <svg id="art-inverno" class="season-svg" viewBox="0 0 1200 500" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <linearGradient id="gInv" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#082f49"/>
+            <stop offset="55%" stop-color="#0369a1"/>
+            <stop offset="100%" stop-color="#090d16"/>
+          </linearGradient>
+        </defs>
+        <rect width="1200" height="500" fill="url(#gInv)"/>
+        <g transform="translate(860, 95)" opacity="0.9">
+          <path d="M20 110 L105 42 L190 110 V205 H20 Z" fill="#38bdf8" opacity="0.25" stroke="#bae6fd" stroke-width="5"/>
+          <rect x="85" y="140" width="40" height="65" fill="none" stroke="#bae6fd" stroke-width="4"/>
+        </g>
+      </svg>
+
+      <svg id="art-primavera" class="season-svg" viewBox="0 0 1200 500" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <linearGradient id="gPri" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#064e3b"/>
+            <stop offset="55%" stop-color="#15803d"/>
+            <stop offset="100%" stop-color="#0d1f15"/>
+          </linearGradient>
+        </defs>
+        <rect width="1200" height="500" fill="url(#gPri)"/>
+        <g transform="translate(860, 95)" opacity="0.9">
+          <path d="M20 110 L105 42 L190 110 V205 H20 Z" fill="#4ade80" opacity="0.25" stroke="#bbf7d0" stroke-width="5"/>
+          <rect x="85" y="140" width="40" height="65" fill="none" stroke="#bbf7d0" stroke-width="4"/>
+        </g>
+      </svg>
+
+      <svg id="art-estate" class="season-svg" viewBox="0 0 1200 500" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <linearGradient id="gEst" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#9a3412"/>
+            <stop offset="50%" stop-color="#ea580c"/>
+            <stop offset="100%" stop-color="#1c110a"/>
+          </linearGradient>
+        </defs>
+        <rect width="1200" height="500" fill="url(#gEst)"/>
+        <g transform="translate(860, 95)" opacity="0.9">
+          <path d="M20 110 L105 42 L190 110 V205 H20 Z" fill="#fb923c" opacity="0.25" stroke="#fef08a" stroke-width="5"/>
+          <rect x="85" y="140" width="40" height="65" fill="none" stroke="#fef08a" stroke-width="4"/>
+        </g>
+      </svg>
+
+      <div class="hero-overlay"></div>
+
+      <div class="hero-content">
+        <div class="hero-top">
+          <div class="event-badge">
+            <span class="live-dot"></span>
+            <span id="upcoming-event-text">Bacheca Immobiliare: Appartamenti, Ville, Garage & Ricerche Dirette</span>
+          </div>
+          <button id="refresh-mood" class="btn-refresh">
+            <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+            Cambia spunto
+          </button>
+        </div>
+
+        <div class="hero-headline">
+          <h1 id="hero-quote">"L'immobile giusto si trova quando chi propone e chi cerca si parlano senza intermediari superflui."</h1>
+          <p>Pubblica, gestisci ed elimina i tuoi annunci con il tuo account e contatti riservati tramite nickname.</p>
+        </div>
+
+        <div class="choice-grid">
+          <a href="vendo-affitto.html" class="choice-card">
+            <div>
+              <span class="choice-label">Tu sei</span>
+              <h2>Voglio dare in affitto / vendere</h2>
+              <p>Inserisci un immobile in affitto o in vendita, indica metratura e canone/prezzo e gestisci lo stato dell'annuncio.</p>
+            </div>
+            <div class="choice-icon-box">
+              <svg class="icon-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10.5L12 3l9 7.5V21H3z"/><path d="M9 21v-6h6v6"/></svg>
+            </div>
+          </a>
+
+          <a href="acquisto-affitto.html" class="choice-card">
+            <div>
+              <span class="choice-label">Tu sei</span>
+              <h2>Voglio affittare / comprare</h2>
+              <p>Pubblica la tua richiesta di affitto o acquisto immobiliare e rispondi in forma riservata alle proposte attive.</p>
+            </div>
+            <div class="choice-icon-box">
+              <svg class="icon-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+<section aria-label="Numeri della bacheca immobiliare">
+      <div class="metrics-grid">
+        <div class="metric-box">
+          <span id="m-imm-offerte" class="metric-val">14</span>
+          <span class="metric-lbl">Immobili in Vendita / Affitto</span>
+        </div>
+        <div class="metric-box">
+          <span id="m-imm-ricerche" class="metric-val">19</span>
+          <span class="metric-lbl">Ricerche Affitto / Acquisto</span>
+        </div>
+        <div class="metric-box">
+          <span id="m-imm-tot" class="metric-val">33</span>
+          <span class="metric-lbl">Totale annunci immobiliari</span>
+        </div>
+        <div class="metric-box">
+          <span id="m-imm-chiusi" class="metric-val">8</span>
+          <span class="metric-lbl">Trattative / Annunci conclusi</span>
+          <span id="m-imm-detail" class="metric-sub">Conclusi: 0 • Tasso: — • Media: —</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="ticker-bar">
+      <div class="ticker-left">
+        <span class="ticker-tag">Live Casa</span>
+        <span id="live-ticker" class="ticker-text">📍 Città di Castello • @CasaCollina_CDC ha pubblicato un trilocale con garage</span>
+      </div>
+      <span class="ticker-note">Email mai visibili • Elimina i tuoi annunci in qualsiasi momento</span>
+    </div>
+<section>
+      <div class="section-head">
+        <div>
+          <h3>Annunci immobiliari attivi</h3>
+          <p>Filtra tra offerte e ricerche, contatta tramite nickname oppure chiudi/elimina i tuoi annunci.</p>
+        </div>
+        <div class="filter-group">
+          <button class="filter-btn active" onclick="filterCards('all', this)">Tutti</button>
+          <button class="filter-btn" onclick="filterCards('offerta', this)">Vendo / Affitto</button>
+          <button class="filter-btn" onclick="filterCards('ricerca', this)">Cerco Casa / Locale</button>
+        </div>
+      </div>
+
+      <div class="cards-grid" id="immobili-cards-grid">
+        <article class="card prop-card" data-offer-id="imm-trilocale-1" data-owner-nick="CasaCollina_CDC" data-type="offerta" data-created-at="">
+          <div>
+            <div class="card-top">
+              <span class="tag-role">Affitto</span>
+              <span class="card-time">Subito disponibile</span>
+            </div>
+            <button type="button" class="nick-badge" onclick="openContactModal('CasaCollina_CDC', 'Trilocale luminosissimo con posto auto')">@CasaCollina_CDC ✉</button>
+            <h4>Trilocale luminosissimo con posto auto</h4>
+            <p>92 mq, due camere, balcone panoramico e posto auto riservato in zona residenziale tranquilla.</p>
+            <span class="price-pill">Canone: 620 €/mese</span>
+          </div>
+          <div class="card-foot">
+            <span>📍 Città di Castello</span>
+            <div class="card-actions">
+              <button type="button" class="btn-close-offer" onclick="markOfferCovered('imm-trilocale-1', this)">Segna concluso</button>
+              <button type="button" class="btn-del-offer" onclick="deleteOfferCard('imm-trilocale-1', this)">Elimina</button>
+              <button onclick="openContactModal('CasaCollina_CDC', 'Trilocale luminosissimo con posto auto')" class="card-link">Contatta →</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="card prop-card" data-offer-id="imm-cerco-1" data-owner-nick="FamigliaAltotevere" data-type="ricerca" data-created-at="">
+          <div>
+            <div class="card-top">
+              <span class="tag-role">Cerca Acquisto</span>
+              <span class="card-time">Entro 3 mesi</span>
+            </div>
+            <button type="button" class="nick-badge" onclick="openContactModal('FamigliaAltotevere', 'Ricerca casa indipendente o quadrilocale')">@FamigliaAltotevere ✉</button>
+            <h4>Ricerca casa indipendente o quadrilocale</h4>
+            <p>Valutiamo soluzioni con almeno 3 camere, doppio bagno e piccolo spazio esterno o garage.</p>
+            <span class="price-pill">Budget indicativo: 165.000 €</span>
+          </div>
+          <div class="card-foot">
+            <span>📍 Altotevere</span>
+            <div class="card-actions">
+              <button type="button" class="btn-close-offer" onclick="markOfferCovered('imm-cerco-1', this)">Segna concluso</button>
+              <button type="button" class="btn-del-offer" onclick="deleteOfferCard('imm-cerco-1', this)">Elimina</button>
+              <button onclick="openContactModal('FamigliaAltotevere', 'Ricerca casa indipendente o quadrilocale')" class="card-link">Proponi →</button>
+            </div>
+          </div>
+        </article>
+
+        <aside class="card card-sponsor">
+          <div>
+            <div class="card-top">
+              <span class="tag-sponsor">Servizi Casa & Tecnici</span>
+              <span class="card-time">Spazio Sponsor</span>
+            </div>
+            <h4>Impianti, certificazioni e ristrutturazioni</h4>
+            <p>Idraulici, elettricisti, geometri e imprese edili locali: promuovi qui i servizi utili a chi compra o affitta.</p>
+          </div>
+          <div class="card-foot">
+            <span>Presenza locale mirata</span>
+            <a href="../contatti.html" class="card-link">Richiedi spazio →</a>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+<footer>
+    <div class="container footer-inner">
+      <div class="footer-links">
+        <a href="../index.html" style="font-weight:700; color:var(--accent);">← Home gengis.it</a>
+        <span>•</span>
+        <a href="index.html">Bacheca Immobili</a>
+        <span>•</span>
+        <a href="vendo-affitto.html">Vendo / Affitto</a>
+        <span>•</span>
+        <a href="acquisto-affitto.html">Acquisto / Affitto</a>
+        <span>•</span>
+        <a href="../privacy.html">Privacy e Cookie Policy</a>
+        <span>•</span>
+        <a href="../termini.html">Termini d'Uso</a>
+        <span>•</span>
+        <a href="../contatti.html">Contatti / Segnalazioni</a>
+      </div>
+
+      <div class="season-tester">
+        <span>Test Stagione:</span>
+        <button onclick="applySeason('autunno')">Autunno</button>
+        <button onclick="applySeason('inverno')">Inverno</button>
+        <button onclick="applySeason('primavera')">Primavera</button>
+        <button onclick="applySeason('estate')">Estate</button>
+      </div>
+    </div>
+  </footer>
+<div id="auth-modal" class="modal-backdrop" onclick="if(event.target===this) closeAuthModal()">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3 id="auth-modal-title">Registrati / Iscriviti</h3>
+        <button onclick="closeAuthModal()" class="modal-close" aria-label="Chiudi">✕</button>
+      </div>
+
+      <div id="auth-logged-box" style="display:none; flex-direction:column; gap:12px;">
+        <p style="font-size:13px; color:var(--text-muted);">Sei connesso come <strong id="logged-nick-display" style="color:var(--accent);"></strong>. Puoi pubblicare ed eliminare annunci e contattare gli altri iscritti senza mostrare la tua email.</p>
+        <button type="button" onclick="logoutUser()" class="modal-submit" style="background-color:var(--bg-subtle); color:var(--text-main);">Esci dall'account</button>
+      </div>
+
+      <div id="auth-forms-wrapper">
+        <p id="auth-reason-msg" style="font-size:12px; color:var(--accent); font-weight:600; margin-bottom:10px; display:none;"></p>
+        <div class="tab-switch">
+          <button id="tab-register" type="button" class="tab-btn active" onclick="switchAuthTab('register')">Registrati / Iscriviti</button>
+          <button id="tab-login" type="button" class="tab-btn" onclick="switchAuthTab('login')">Accedi (Login)</button>
+        </div>
+
+        <form id="form-register" class="modal-form" onsubmit="handleRegister(event)">
+          <div>
+            <label class="field-lbl" for="reg-nick">Nickname (pubblico sugli annunci, anche inventato)</label>
+            <input id="reg-nick" type="text" class="modal-input" placeholder="Es. CasaAltotevere" required />
+          </div>
+          <div>
+            <label class="field-lbl" for="reg-realname">Nome vero (privato, mai pubblicato)</label>
+            <input id="reg-realname" type="text" class="modal-input" placeholder="Es. Marco Rossi" required />
+          </div>
+          <div>
+            <label class="field-lbl" for="reg-email">Email (privata, mai visibile agli altri utenti)</label>
+            <input id="reg-email" type="email" class="modal-input" placeholder="nome@esempio.it" required />
+          </div>
+          <div>
+            <label class="field-lbl" for="reg-pass">Password</label>
+            <input id="reg-pass" type="password" class="modal-input" placeholder="Crea una password" required />
+          </div>
+          <label class="check-row">
+            <input id="reg-privacy" type="checkbox" required />
+            <span>Ho letto l'<a href="../privacy.html" target="_blank">Informativa Privacy e Cookie</a> e accetto i <a href="../termini.html" target="_blank">Termini d'Uso</a> di gengis.it.</span>
+          </label>
+          <button type="submit" class="modal-submit">Crea account e continua →</button>
+        </form>
+
+        <form id="form-login" class="modal-form" style="display:none;" onsubmit="handleLogin(event)">
+          <div>
+            <label class="field-lbl" for="log-email">Email</label>
+            <input id="log-email" type="email" class="modal-input" placeholder="nome@esempio.it" required />
+          </div>
+          <div>
+            <label class="field-lbl" for="log-pass">Password</label>
+            <input id="log-pass" type="password" class="modal-input" placeholder="La tua password" required />
+            <div class="forgot-link-row">
+              <button type="button" class="btn-forgot" onclick="switchAuthTab('forgot')">Password dimenticata?</button>
+            </div>
+          </div>
+          <button type="submit" class="modal-submit">Accedi subito →</button>
+        </form>
+
+        <form id="form-forgot" class="modal-form" style="display:none;" onsubmit="handleForgotPassword(event)">
+          <div class="privacy-note-box">
+            Inserisci l'indirizzo email utilizzato in fase di registrazione. Riceverai un link sicuro per impostare una nuova password.
+          </div>
+          <div>
+            <label class="field-lbl" for="forgot-email">La tua Email di registrazione</label>
+            <input id="forgot-email" type="email" class="modal-input" placeholder="nome@esempio.it" required />
+          </div>
+          <div id="reset-feedback" class="reset-feedback"></div>
+          <button type="submit" class="modal-submit">Invia mail per cambio password →</button>
+          <button type="button" class="btn-forgot" style="text-align:center; margin-top:4px;" onclick="switchAuthTab('login')">← Torna al Login</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div id="quick-modal" class="modal-backdrop" onclick="if(event.target===this) closePublishModal()">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3 id="modal-title">Pubblica Annuncio Immobiliare</h3>
+        <button onclick="closePublishModal()" class="modal-close" aria-label="Chiudi">✕</button>
+      </div>
+
+      <div class="tab-switch">
+        <button id="tab-offerta" type="button" class="tab-btn active" onclick="switchModalMode('offerta')">Vendo / Affitto</button>
+        <button id="tab-ricerca" type="button" class="tab-btn" onclick="switchModalMode('ricerca')">Cerco Casa / Locale</button>
+      </div>
+
+      <form class="modal-form" onsubmit="submitQuickForm(event)">
+        <div class="privacy-note-box">
+          Pubblicherai con il tuo nickname <strong id="pub-nick-preview" style="color:var(--accent);"></strong>. Potrai eliminare l'annuncio quando vorrai.
+        </div>
+        <div>
+          <label class="field-lbl" for="inp-title">Titolo o tipologia immobile</label>
+          <input id="inp-title" type="text" class="modal-input" placeholder="Es. Bilocale ristrutturato o Ricerca bilocale" required />
+        </div>
+        <div>
+          <label class="field-lbl" for="inp-price">Canone / Prezzo / Budget</label>
+          <input id="inp-price" type="text" class="modal-input" placeholder="Es. 550 €/mese oppure 140.000 €" required />
+        </div>
+        <div>
+          <label class="field-lbl" for="inp-desc">Caratteristiche e disponibilità</label>
+          <input id="inp-desc" type="text" class="modal-input" placeholder="Es. 65 mq, piano 1°, libero da subito" required />
+        </div>
+        <div>
+          <label class="field-lbl" for="inp-territory">Comune / Zona</label>
+          <input id="inp-territory" type="text" class="modal-input" value="Città di Castello" required />
+        </div>
+        <button type="submit" class="modal-submit">Pubblica annuncio →</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="contact-modal" class="modal-backdrop" onclick="if(event.target===this) closeContactModal()">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3>Invia mail a <span id="contact-target-nick" style="color:var(--accent);"></span></h3>
+        <button onclick="closeContactModal()" class="modal-close" aria-label="Chiudi">✕</button>
+      </div>
+
+      <form class="modal-form" onsubmit="submitContactForm(event)">
+        <div class="privacy-note-box">
+          🔒 <strong>Privacy protetta:</strong> l'indirizzo email del destinatario resta nascosto. Il messaggio partirà dal tuo nickname <strong id="contact-sender-label"></strong>.
+        </div>
+        <div>
+          <label class="field-lbl">Riferimento immobile</label>
+          <input id="contact-ref-title" type="text" class="modal-input" readonly />
+        </div>
+        <div>
+          <label class="field-lbl" for="contact-message">Messaggio</label>
+          <textarea id="contact-message" rows="4" class="modal-input" placeholder="Chiedi informazioni, visita o invia la tua proposta..." required></textarea>
+        </div>
+        <button type="submit" class="modal-submit">Invia mail riservata →</button>
+      </form>
+    </div>
+  </div>
+<script>
+    const seasonalData = {
+      autunno: {
+        badge: "Autunno • Casa & Territorio",
+        eventText: "Bacheca Immobiliare: Appartamenti, Ville, Garage & Ricerche Dirette",
+        bgPageLight: "#FAF6F0", bgPageDark: "#141210", accent: "#B45309", accentSoft: "rgba(180, 83, 9, 0.13)",
+        quotes: [
+          "L'immobile giusto si trova quando chi propone e chi cerca si parlano senza intermediari superflui.",
+          "Una bacheca chiara e diretta per chi affitta, vende o cerca casa sul territorio.",
+          "Gestisci i tuoi annunci in autonomia e tieni sempre sotto controllo la tua privacy."
+        ]
+      },
+      inverno: {
+        badge: "Inverno • Casa & Territorio",
+        eventText: "Bacheca Immobiliare: Soluzioni Abitative, Locali & Ricerche d'Inverno",
+        bgPageLight: "#F3F6FA", bgPageDark: "#0F1318", accent: "#0369A1", accentSoft: "rgba(3, 105, 161, 0.13)",
+        quotes: [
+          "Trova lo spazio adatto alle tue esigenze senza perdere tempo in decine di portali dispersivi.",
+          "Annunci essenziali, contatti protetti e controllo diretto sul tuo profilo."
+        ]
+      },
+      primavera: {
+        badge: "Primavera • Casa & Territorio",
+        eventText: "Bacheca Immobiliare: Nuove Proposte, Case con Giardino & Affitti",
+        bgPageLight: "#F2F8F4", bgPageDark: "#101713", accent: "#15803D", accentSoft: "rgba(21, 128, 61, 0.13)",
+        quotes: [
+          "Nuova stagione per cambiare casa o mettere a reddito un immobile con semplicità.",
+          "Confronta proposte dirette e chiudi o elimina il tuo annuncio in un clic."
+        ]
+      },
+      estate: {
+        badge: "Estate • Casa & Territorio",
+        eventText: "Bacheca Immobiliare: Affitti, Residenze & Ricerche sul Territorio",
+        bgPageLight: "#FFF8F1", bgPageDark: "#18120E", accent: "#EA580C", accentSoft: "rgba(234, 88, 12, 0.13)",
+        quotes: [
+          "Dalla ricerca del primo appartamento alla vendita di un immobile: tutto in un'unica bacheca.",
+          "Contatti riservati tramite nickname e massima trasparenza sulle disponibilità."
+        ]
+      }
+    };
+
+    let currentSeasonKey = localStorage.getItem('gengis-season') || detectCurrentSeason();
+    function detectCurrentSeason() {
+      const now = new Date();
+      const m = now.getMonth() + 1;
+      const d = now.getDate();
+      if ((m === 3 && d >= 20) || m === 4 || m === 5 || (m === 6 && d < 21)) return 'primavera';
+      if ((m === 6 && d >= 21) || m === 7 || m === 8 || (m === 9 && d < 23)) return 'estate';
+      if ((m === 9 && d >= 23) || m === 10 || m === 11 || (m === 12 && d < 21)) return 'autunno';
+      return 'inverno';
+    }
+
+    function applySeason(seasonKey) {
+      currentSeasonKey = seasonKey;
+      localStorage.setItem('gengis-season', seasonKey);
+      const data = seasonalData[seasonKey];
+      const isDark = document.documentElement.classList.contains('dark');
+      const root = document.documentElement;
+      root.style.setProperty('--bg-page', isDark ? data.bgPageDark : data.bgPageLight);
+      root.style.setProperty('--accent', data.accent);
+      root.style.setProperty('--accent-soft', data.accentSoft);
+      document.getElementById('season-badge').textContent = data.badge;
+      document.getElementById('upcoming-event-text').textContent = data.eventText;
+      document.querySelectorAll('.season-svg').forEach(svg => svg.classList.remove('active'));
+      const activeArt = document.getElementById('art-' + seasonKey);
+      if (activeArt) activeArt.classList.add('active');
+      pickRandomHeroContent();
+    }
+
+    function pickRandomHeroContent() {
+      const data = seasonalData[currentSeasonKey];
+      document.getElementById('hero-quote').textContent = `"${data.quotes[Math.floor(Math.random() * data.quotes.length)]}"`;
+    }
+
+    const themeBtn = document.getElementById('theme-toggle');
+    const themeLabel = document.getElementById('theme-label');
+    const themeIcon = document.getElementById('theme-icon');
+    function updateThemeUI(isDark) {
+      const data = seasonalData[currentSeasonKey];
+      document.documentElement.style.setProperty('--bg-page', isDark ? data.bgPageDark : data.bgPageLight);
+      themeLabel.textContent = isDark ? 'Giorno' : 'Notte';
+      themeIcon.innerHTML = isDark
+        ? '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>'
+        : '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+    }
+    themeBtn.addEventListener('click', () => {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('gengis-theme', isDark ? 'dark' : 'light');
+      updateThemeUI(isDark);
+    });
+    document.getElementById('refresh-mood').addEventListener('click', pickRandomHeroContent);
+
+    function getImmStore() { return JSON.parse(localStorage.getItem('gengis-imm-offers') || '{}'); }
+    function saveImmStore(store) { localStorage.setItem('gengis-imm-offers', JSON.stringify(store)); }
+    function getImmMetrics() { return JSON.parse(localStorage.getItem('gengis-imm-metrics') || '{"offerte":14,"ricerche":19,"conclusi":8}'); }
+    function formatDuration(ms) {
+      if (!ms || ms < 0) return '—';
+      const mins = Math.round(ms / 60000);
+      return mins < 60 ? `${mins} min` : `${(mins / 60).toFixed(1)} h`;
+    }
+    function renderMetrics() {
+      const m = getImmMetrics();
+      const items = Object.values(getImmStore());
+      const closed = items.filter(o => o.status === 'concluso');
+      const rate = items.length > 0 ? `${Math.round((closed.length / items.length) * 100)}%` : '—';
+      const durations = closed.filter(o => o.createdAt && o.closedAt && o.closedAt >= o.createdAt).map(o => o.closedAt - o.createdAt);
+      const avg = durations.length > 0 ? formatDuration(durations.reduce((a, b) => a + b, 0) / durations.length) : '—';
+      document.getElementById('m-imm-offerte').textContent = m.offerte;
+      document.getElementById('m-imm-ricerche').textContent = m.ricerche;
+      document.getElementById('m-imm-tot').textContent = m.offerte + m.ricerche;
+      document.getElementById('m-imm-chiusi').textContent = m.conclusi;
+      document.getElementById('m-imm-detail').textContent = `Conclusi: ${closed.length} • Tasso: ${rate} • Media: ${avg}`;
+    }
+    function applyOfferClosedUI(card, btnEl) {
+      if (!card) return;
+      card.dataset.status = 'concluso';
+      card.classList.add('is-covered');
+      const top = card.querySelector('.card-top');
+      if (top && !top.querySelector('.tag-covered')) {
+        const badge = document.createElement('span');
+        badge.className = 'tag-covered';
+        badge.textContent = 'Concluso';
+        top.appendChild(badge);
+      }
+      const btn = btnEl || card.querySelector('.btn-close-offer');
+      if (btn) { btn.textContent = 'Concluso ✓'; btn.disabled = true; }
+    }
+    function markOfferCovered(offerId, btnEl) {
+      const store = getImmStore();
+      if (store[offerId] && store[offerId].status === 'concluso') return;
+      const card = btnEl ? btnEl.closest('[data-offer-id]') : document.querySelector(`[data-offer-id="${offerId}"]`);
+      const now = Date.now();
+      const createdAt = (store[offerId] && store[offerId].createdAt) || Number(card && card.dataset.createdAt) || (now - 1800000);
+      store[offerId] = { ...(store[offerId] || {}), id: offerId, createdAt, closedAt: now, status: 'concluso' };
+      saveImmStore(store);
+      const m = getImmMetrics();
+      m.conclusi += 1;
+      localStorage.setItem('gengis-imm-metrics', JSON.stringify(m));
+      applyOfferClosedUI(card, btnEl);
+      renderMetrics();
+    }
+    function deleteOfferCard(offerId, btnEl) {
+      const user = getCurrentUser();
+      const card = btnEl ? btnEl.closest('[data-offer-id]') : document.querySelector(`[data-offer-id="${offerId}"]`);
+      const ownerNick = card ? (card.dataset.ownerNick || '').toLowerCase() : '';
+      if (!user || user.nickname.toLowerCase() !== ownerNick) {
+        alert("Puoi eliminare solo gli annunci pubblicati con il tuo account (@" + (user ? user.nickname : 'ospite') + ").");
+        return;
+      }
+      if (!confirm("Vuoi eliminare definitivamente questo annuncio immobiliare?")) return;
+      const store = getImmStore();
+      delete store[offerId];
+      saveImmStore(store);
+      const m = getImmMetrics();
+      if (card && card.dataset.type === 'offerta' && m.offerte > 0) m.offerte -= 1;
+      if (card && card.dataset.type === 'ricerca' && m.ricerche > 0) m.ricerche -= 1;
+      localStorage.setItem('gengis-imm-metrics', JSON.stringify(m));
+      if (card) card.remove();
+      renderMetrics();
+    }
+    function syncOffersFromStore() {
+      const store = getImmStore();
+      document.querySelectorAll('[data-offer-id]').forEach(card => {
+        const id = card.dataset.offerId;
+        if (!card.dataset.createdAt) card.dataset.createdAt = String(Date.now() - 3600000);
+        if (!store[id]) store[id] = { id, createdAt: Number(card.dataset.createdAt), status: 'aperta' };
+        if (store[id].status === 'concluso') applyOfferClosedUI(card);
+      });
+      saveImmStore(store);
+    }
+let pendingAction = null;
+    function getCurrentUser() { return JSON.parse(localStorage.getItem('gengis-user') || 'null'); }
+    function updateAuthUI() {
+      const user = getCurrentUser();
+      document.getElementById('auth-nav-btn').textContent = user ? `@${user.nickname}` : 'Registrati / Accedi';
+    }
+    function openAuthModal(tab = 'register', reasonText = '') {
+      const user = getCurrentUser();
+      const loggedBox = document.getElementById('auth-logged-box');
+      const formsWrapper = document.getElementById('auth-forms-wrapper');
+      const reasonEl = document.getElementById('auth-reason-msg');
+      reasonEl.textContent = reasonText;
+      reasonEl.style.display = reasonText ? 'block' : 'none';
+      if (user) {
+        document.getElementById('auth-modal-title').textContent = 'Il tuo Account';
+        document.getElementById('logged-nick-display').textContent = '@' + user.nickname;
+        loggedBox.style.display = 'flex';
+        formsWrapper.style.display = 'none';
+      } else {
+        loggedBox.style.display = 'none';
+        formsWrapper.style.display = 'block';
+        switchAuthTab(tab);
+      }
+      document.getElementById('auth-modal').classList.add('open');
+    }
+    function closeAuthModal() { document.getElementById('auth-modal').classList.remove('open'); }
+    function switchAuthTab(tab) {
+      document.getElementById('tab-register').classList.toggle('active', tab === 'register');
+      document.getElementById('tab-login').classList.toggle('active', tab === 'login' || tab === 'forgot');
+      document.getElementById('form-register').style.display = tab === 'register' ? 'flex' : 'none';
+      document.getElementById('form-login').style.display = tab === 'login' ? 'flex' : 'none';
+      document.getElementById('form-forgot').style.display = tab === 'forgot' ? 'flex' : 'none';
+      document.getElementById('reset-feedback').style.display = 'none';
+    }
+    function handleForgotPassword(e) {
+      e.preventDefault();
+      const email = document.getElementById('forgot-email').value.trim();
+      const fb = document.getElementById('reset-feedback');
+      fb.innerHTML = `<strong>Richiesta inviata!</strong><br>Se <strong>${email}</strong> è associato a un account, riceverai il link per reimpostare la password.`;
+      fb.style.display = 'block';
+    }
+    function resumePendingAction() {
+      if (!pendingAction) return;
+      const act = pendingAction;
+      pendingAction = null;
+      if (act.type === 'publish') openPublishModal(act.mode);
+      if (act.type === 'contact') openContactModal(act.nick, act.title);
+    }
+    function handleRegister(e) {
+      e.preventDefault();
+      const user = {
+        nickname: document.getElementById('reg-nick').value.trim().replace(/^@/, ''),
+        realName: document.getElementById('reg-realname').value.trim(),
+        email: document.getElementById('reg-email').value.trim(),
+        password: document.getElementById('reg-pass').value
+      };
+      localStorage.setItem('gengis-user', JSON.stringify(user));
+      localStorage.setItem('gengis-registered-account', JSON.stringify(user));
+      updateAuthUI(); closeAuthModal(); resumePendingAction();
+    }
+    function handleLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('log-email').value.trim();
+      const pass = document.getElementById('log-pass').value;
+      const saved = localStorage.getItem('gengis-registered-account');
+      let user;
+      if (saved) {
+        const acc = JSON.parse(saved);
+        if (acc.email === email && acc.password === pass) user = acc;
+      }
+      if (!user) user = { nickname: email.split('@')[0], realName: email.split('@')[0], email, password: pass };
+      localStorage.setItem('gengis-user', JSON.stringify(user));
+      updateAuthUI(); closeAuthModal(); resumePendingAction();
+    }
+    function logoutUser() {
+      localStorage.removeItem('gengis-user');
+      updateAuthUI(); closeAuthModal();
+    }
+
+    let currentModalMode = 'offerta';
+    function openPublishModal(mode = 'offerta') {
+      const user = getCurrentUser();
+      if (!user) {
+        pendingAction = { type: 'publish', mode };
+        openAuthModal('register', 'Per pubblicare un annuncio immobiliare è necessario registrarsi o accedere.');
+        return;
+      }
+      document.getElementById('pub-nick-preview').textContent = '@' + user.nickname;
+      switchModalMode(mode);
+      document.getElementById('quick-modal').classList.add('open');
+    }
+    function closePublishModal() { document.getElementById('quick-modal').classList.remove('open'); }
+    function switchModalMode(mode) {
+      currentModalMode = mode;
+      document.getElementById('tab-offerta').classList.toggle('active', mode === 'offerta');
+      document.getElementById('tab-ricerca').classList.toggle('active', mode === 'ricerca');
+      document.getElementById('modal-title').textContent = mode === 'offerta' ? 'Pubblica Vendo / Affitto' : 'Pubblica Cerco Casa / Locale';
+    }
+    function submitQuickForm(e) {
+      e.preventDefault();
+      const user = getCurrentUser();
+      if (!user) return;
+      const title = document.getElementById('inp-title').value.trim();
+      const price = document.getElementById('inp-price').value.trim();
+      const desc = document.getElementById('inp-desc').value.trim();
+      const terr = document.getElementById('inp-territory').value.trim();
+      const nick = user.nickname;
+
+      const m = getImmMetrics();
+      if (currentModalMode === 'offerta') m.offerte += 1;
+      else m.ricerche += 1;
+      localStorage.setItem('gengis-imm-metrics', JSON.stringify(m));
+
+      const offerId = 'imm-' + Date.now();
+      const createdAt = Date.now();
+      const store = getImmStore();
+      store[offerId] = { id: offerId, createdAt, status: 'aperta' };
+      saveImmStore(store);
+      renderMetrics();
+
+      const card = document.createElement('article');
+      card.className = 'card prop-card';
+      card.dataset.offerId = offerId;
+      card.dataset.ownerNick = nick;
+      card.dataset.createdAt = String(createdAt);
+      card.dataset.type = currentModalMode;
+      const safeNick = nick.replace(/'/g, "\\'");
+      const safeTitle = title.replace(/'/g, "\\'");
+      card.innerHTML = `
+        <div>
+          <div class="card-top">
+            <span class="tag-role">${currentModalMode === 'offerta' ? 'Vendo / Affitto' : 'Cerco Immobile'}</span>
+            <span class="card-time">Appena inserito</span>
+          </div>
+          <button type="button" class="nick-badge" onclick="openContactModal('${safeNick}', '${safeTitle}')">@${nick} ✉</button>
+          <h4>${title}</h4>
+          <p>${desc}</p>
+          <span class="price-pill">${price}</span>
+        </div>
+        <div class="card-foot">
+          <span>📍 ${terr}</span>
+          <div class="card-actions">
+            <button type="button" class="btn-close-offer" onclick="markOfferCovered('${offerId}', this)">Segna concluso</button>
+            <button type="button" class="btn-del-offer" onclick="deleteOfferCard('${offerId}', this)">Elimina</button>
+            <button onclick="openContactModal('${safeNick}', '${safeTitle}')" class="card-link">Contatta →</button>
+          </div>
+        </div>
+      `;
+      document.getElementById('immobili-cards-grid').prepend(card);
+      e.target.reset();
+      document.getElementById('inp-territory').value = terr;
+      closePublishModal();
+    }
+
+    function openContactModal(targetNick, refTitle) {
+      const user = getCurrentUser();
+      if (!user) {
+        pendingAction = { type: 'contact', nick: targetNick, title: refTitle };
+        openAuthModal('register', 'Per contattare un inserzionista è necessario registrarsi o accedere.');
+        return;
+      }
+      document.getElementById('contact-target-nick').textContent = '@' + targetNick;
+      document.getElementById('contact-sender-label').textContent = '@' + user.nickname;
+      document.getElementById('contact-ref-title').value = refTitle;
+      document.getElementById('contact-message').value = '';
+      document.getElementById('contact-modal').classList.add('open');
+    }
+    function closeContactModal() { document.getElementById('contact-modal').classList.remove('open'); }
+    function submitContactForm(e) {
+      e.preventDefault();
+      const targetNick = document.getElementById('contact-target-nick').textContent;
+      closeContactModal();
+      alert(`Messaggio riservato inviato a ${targetNick}!`);
+    }
+
+    const tickerMessages = [
+      "📍 Città di Castello • @CasaCollina_CDC ha pubblicato un trilocale con garage",
+      "📍 Altotevere • @FamigliaAltotevere cerca quadrilocale o casa indipendente",
+      "📍 Zona Centro • Disponibile fondo commerciale / studio in affitto",
+      "📍 San Giustino • @SpaziVerdi_PG cerca bilocale in affitto per tutto l'anno"
+    ];
+    let tickerIdx = 0;
+    setInterval(() => {
+      tickerIdx = (tickerIdx + 1) % tickerMessages.length;
+      document.getElementById('live-ticker').textContent = tickerMessages[tickerIdx];
+    }, 5000);
+
+    function filterCards(type, btnEl) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      if (btnEl) btnEl.classList.add('active');
+      document.querySelectorAll('.prop-card').forEach(card => {
+        card.style.display = (type === 'all' || card.dataset.type === type) ? 'flex' : 'none';
+      });
+    }
+if (localStorage.getItem('gengis-theme') === 'dark') document.documentElement.classList.add('dark');
+    applySeason(currentSeasonKey);
+    updateThemeUI(document.documentElement.classList.contains('dark'));
+    syncOffersFromStore();
+    renderMetrics();
+    updateAuthUI();
+  </script>
+</body>
+</html>

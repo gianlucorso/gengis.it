@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>gengis.it — Hub Servizi, Territorio, Immobili & Automazioni</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-page: #FAF6F0;
+      --bg-card: #FFFFFF;
+      --bg-subtle: #F1EBE1;
+      --text-main: #1C1917;
+      --text-muted: #57534E;
+      --border-color: #E7E0D5;
+      --accent: #B45309;
+      --accent-soft: rgba(180, 83, 9, 0.12);
+    }
+
+    html.dark {
+      --bg-page: #141210;
+      --bg-card: #1E1B18;
+      --bg-subtle: #292521;
+      --text-main: #F5F5F4;
+      --text-muted: #A8A29E;
+      --border-color: #2E2924;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: background-color 0.35s ease, color 0.3s ease;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    button, input, textarea { font-family: inherit; }
+    button { cursor: pointer; border: none; background: none; }
+
+    .container { width: 100%; max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+    .icon-sm { width: 15px; height: 15px; flex-shrink: 0; }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background-color: var(--bg-card);
+      border-bottom: 1px solid var(--border-color);
+      backdrop-filter: blur(10px);
+    }
+    .header-inner {
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .brand-group { display: flex; align-items: center; gap: 12px; }
+    .logo {
+      font-size: 23px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--text-main);
+    }
+    .logo-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background-color: var(--accent);
+      display: inline-block;
+    }
+    .logo span.ext { color: var(--accent); }
+
+    .pill-hub {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background-color: var(--bg-subtle);
+      color: var(--text-muted);
+    }
+
+    .header-actions { display: flex; align-items: center; gap: 8px; }
+    .pill-season {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 999px;
+      background-color: var(--accent-soft);
+      color: var(--accent);
+    }
+    .btn-account {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--accent);
+      background-color: var(--accent-soft);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: opacity 0.2s;
+    }
+    .btn-account:hover { opacity: 0.88; }
+    .btn-theme {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-card);
+      color: var(--text-main);
+      font-size: 12px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: border-color 0.2s;
+    }
+    .btn-theme:hover { border-color: var(--accent); }
+main {
+      flex: 1;
+      padding: 32px 0 52px;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .hub-intro {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .hub-intro h1 {
+      font-size: clamp(26px, 3.8vw, 40px);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.6px;
+      max-width: 720px;
+    }
+    .hub-intro p {
+      margin-top: 8px;
+      font-size: 15px;
+      color: var(--text-muted);
+      max-width: 640px;
+    }
+    .filter-bar {
+      display: inline-flex;
+      flex-wrap: wrap;
+      background-color: var(--bg-subtle);
+      padding: 4px;
+      border-radius: 12px;
+      gap: 4px;
+    }
+    .filter-btn {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 7px 13px;
+      border-radius: 9px;
+      color: var(--text-muted);
+    }
+    .filter-btn.active {
+      background-color: var(--bg-card);
+      color: var(--text-main);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+
+    .featured-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+    .featured-card {
+      background-color: var(--bg-card);
+      border: 2px solid var(--accent);
+      border-radius: 22px;
+      padding: 26px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 20px;
+      box-shadow: 0 10px 26px rgba(0,0,0,0.06);
+    }
+    .featured-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .badge-featured {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background-color: var(--accent);
+      color: #FFFFFF;
+    }
+    .btn-pin {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 8px;
+      background-color: var(--bg-subtle);
+      color: var(--text-muted);
+    }
+    .btn-pin:hover { color: var(--accent); }
+
+    .featured-card h2 {
+      font-size: 23px;
+      font-weight: 800;
+      margin: 12px 0 8px;
+      letter-spacing: -0.4px;
+    }
+    .featured-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    .featured-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-color);
+    }
+    .btn-enter {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background-color: var(--accent);
+      color: #FFFFFF;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 11px 18px;
+      border-radius: 12px;
+      transition: opacity 0.2s;
+    }
+    .btn-enter:hover { opacity: 0.92; }
+
+    .section-label {
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .service-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 18px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 16px;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .service-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .service-card.muted {
+      opacity: 0.58;
+      border-style: dashed;
+    }
+    .service-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .tag-cat {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background-color: var(--accent-soft);
+      color: var(--accent);
+    }
+    .service-card h3 { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+    .service-card p { font-size: 13px; color: var(--text-muted); }
+    .service-foot {
+      padding-top: 12px;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+    }
+    .link-accent { font-weight: 700; color: var(--accent); }
+    .link-accent:hover { text-decoration: underline; }
+
+    .sponsor-card {
+      background-color: var(--bg-subtle);
+      border: 1px dashed var(--accent);
+      border-radius: 22px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .tag-sponsor {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background-color: var(--text-main);
+      color: var(--bg-card);
+      display: inline-block;
+    }
+    .sponsor-card h3 { font-size: 18px; font-weight: 800; margin: 10px 0 6px; }
+    .sponsor-card p { font-size: 13px; color: var(--text-muted); }
+.modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(4px);
+      z-index: 120;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal-box {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 22px;
+      width: 100%;
+      max-width: 470px;
+      padding: 24px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+      max-height: 92vh;
+      overflow-y: auto;
+    }
+    .modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+    .modal-head h3 { font-size: 19px; font-weight: 800; }
+    .modal-close { font-size: 20px; color: var(--text-muted); padding: 4px 8px; }
+    .tab-switch {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      background-color: var(--bg-subtle);
+      padding: 4px;
+      border-radius: 12px;
+      margin-bottom: 16px;
+    }
+    .tab-btn { padding: 8px; border-radius: 9px; font-size: 12px; font-weight: 700; color: var(--text-muted); }
+    .tab-btn.active { background-color: var(--bg-card); color: var(--accent); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .modal-form { display: flex; flex-direction: column; gap: 11px; }
+    .modal-form label.field-lbl { font-size: 12px; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 4px; }
+    .modal-input {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      font-size: 13px;
+    }
+    .check-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.4;
+      cursor: pointer;
+    }
+    .check-row input[type="checkbox"] {
+      margin-top: 2px;
+      accent-color: var(--accent);
+      width: 15px;
+      height: 15px;
+      flex-shrink: 0;
+    }
+    .check-row a { color: var(--accent); font-weight: 700; text-decoration: underline; }
+    .modal-submit {
+      margin-top: 6px;
+      background-color: var(--accent);
+      color: #FFFFFF;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 11px;
+      border-radius: 10px;
+    }
+
+    footer {
+      border-top: 1px solid var(--border-color);
+      padding: 20px 0;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .footer-legal {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+    .footer-legal a:hover { color: var(--accent); text-decoration: underline; }
+    .season-tester {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background-color: var(--bg-card);
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border-color);
+    }
+    .season-tester button {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 999px;
+      color: var(--text-main);
+    }
+    .season-tester button:hover { background-color: var(--bg-subtle); }
+
+    @media (max-width: 860px) {
+      .featured-grid, .services-grid { grid-template-columns: 1fr; }
+      .pill-hub, .pill-season { display: none; }
+    }
+  </style>
+</head>
+<body>
+<header>
+    <div class="container header-inner">
+      <div class="brand-group">
+        <a href="index.html" class="logo">
+          <span class="logo-dot"></span>
+          <span>gengis<span class="ext">.it</span></span>
+        </a>
+        <span class="pill-hub">Hub Servizi, Territorio & Immobili</span>
+      </div>
+
+      <div class="header-actions">
+        <span id="season-badge" class="pill-season">Autunno • Hub Attivo</span>
+        <button id="auth-nav-btn" onclick="openAuthModal('register')" class="btn-account">Registrati / Accedi</button>
+        <button id="theme-toggle" class="btn-theme" aria-label="Cambia modalità giorno notte">
+          <svg id="theme-icon" class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <span id="theme-label">Notte</span>
+        </button>
+      </div>
+    </div>
+  </header>
+<main class="container">
+    <section class="hub-intro">
+      <div>
+        <h1>Un unico punto d'accesso per i servizi del tuo territorio.</h1>
+        <p>Esplora i moduli attivi su gengis.it: entra nel portale Attività & Personale oppure nella bacheca Immobili per affitto, vendita e ricerca casa.</p>
+      </div>
+
+      <div class="filter-bar">
+        <button class="filter-btn active" onclick="filterHub('all', this)">Tutti i servizi</button>
+        <button class="filter-btn" onclick="filterHub('evidenza', this)">Solo in evidenza</button>
+        <button class="filter-btn" onclick="filterHub('immobili', this)">Immobili</button>
+      </div>
+    </section>
+<section class="featured-grid">
+      <article class="featured-card hub-item" data-featured="true" data-module="territorio">
+        <div>
+          <div class="featured-top">
+            <span class="badge-featured">★ In Evidenza Oggi</span>
+            <span style="font-size:12px; color:var(--text-muted); font-weight:600;">📍 Altotevere • Centro Italia</span>
+          </div>
+          <h2>Portale Territorio: Attività & Personale</h2>
+          <p>
+            Il punto d'incontro gratuito tra bar, enoteche, ristoranti, fiere del vicinato e professionisti (baristi, sommelier, staff eventi). Contatti protetti tramite nickname e metriche dal vivo.
+          </p>
+        </div>
+
+        <div class="featured-actions">
+          <a href="territorio/index.html" class="btn-enter">
+            Entra nel Portale
+            <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+          <div style="display:flex; gap:12px; font-size:12px; font-weight:700;">
+            <a href="territorio/titolare.html" class="link-accent">Area Titolari</a>
+            <span style="color:var(--border-color);">|</span>
+            <a href="territorio/personale.html" class="link-accent">Area Personale</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="featured-card hub-item" data-featured="true" data-module="immobili">
+        <div>
+          <div class="featured-top">
+            <span class="badge-featured">★ Modulo Immobili</span>
+            <span style="font-size:12px; color:var(--text-muted); font-weight:600;">🏠 Affitto • Vendita • Ricerca</span>
+          </div>
+          <h2>Bacheca Immobili: Vendita & Affitto</h2>
+          <p>
+            Spazio dedicato a chi vuole cedere in affitto o vendere un immobile e a chi cerca casa, appartamento, garage o locale in affitto o acquisto. Gestione annunci con account e contatto riservato.
+          </p>
+        </div>
+
+        <div class="featured-actions">
+          <a href="immobili/index.html" class="btn-enter">
+            Apri Bacheca Immobili
+            <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+          <div style="display:flex; gap:12px; font-size:12px; font-weight:700;">
+            <a href="immobili/vendo-affitto.html" class="link-accent">Vendo / Affitto</a>
+            <span style="color:var(--border-color);">|</span>
+            <a href="immobili/acquisto-affitto.html" class="link-accent">Acquisto / Affitto</a>
+          </div>
+        </div>
+      </article>
+    </section>
+<section>
+      <div class="section-label">Altri servizi e moduli dell'ecosistema (clicca per mettere in evidenza o tralasciare)</div>
+
+      <div class="services-grid">
+        <article class="service-card hub-item" data-featured="true" data-module="immobili">
+          <div>
+            <div class="service-top">
+              <span class="tag-cat">Immobili & Territorio</span>
+              <button onclick="toggleHighlight(this)" class="btn-pin">★ In evidenza</button>
+            </div>
+            <h3>Bacheca Casa & Locali Diretti</h3>
+            <p>Pubblica o elimina i tuoi annunci di vendita e affitto o consulta chi cerca un immobile nella zona.</p>
+          </div>
+          <div class="service-foot">
+            <span style="color:var(--text-muted);">Modulo Attivo</span>
+            <a href="immobili/vendo-affitto.html" class="link-accent">Pubblica immobile →</a>
+          </div>
+        </article>
+
+        <article class="service-card hub-item" data-featured="true" data-module="territorio">
+          <div>
+            <div class="service-top">
+              <span class="tag-cat">Automazione & AI</span>
+              <button onclick="toggleHighlight(this)" class="btn-pin">★ In evidenza</button>
+            </div>
+            <h3>Agente WhatsApp per Locali & Fiere</h3>
+            <p>Assistente autonomo per gestire prenotazioni, informazioni sugli stand e incrocio rapido tra turni scoperti e staff via WhatsApp.</p>
+          </div>
+          <div class="service-foot">
+            <span style="color:var(--text-muted);">Modulo Attivabile</span>
+            <a href="territorio/index.html" class="link-accent">Scopri nel portale →</a>
+          </div>
+        </article>
+
+        <aside class="sponsor-card hub-item" data-featured="true" data-module="partner">
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="tag-sponsor">Main Partner Hub</span>
+              <span style="font-size:11px; color:var(--text-muted);">Spazio Sponsor</span>
+            </div>
+            <h3>Il tuo brand al centro dell'ecosistema gengis.it</h3>
+            <p>
+              Sostieni lo sviluppo dei servizi digitali locali e ottieni visibilità trasversale su tutte le sezioni del portale per aziende, locali e professionisti.
+            </p>
+          </div>
+          <div class="service-foot">
+            <span>Pacchetto Rete Completa</span>
+            <a href="contatti.html" class="link-accent">Diventa Partner →</a>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+<footer>
+    <div class="container footer-inner">
+      <div class="footer-legal">
+        <strong>gengis.it</strong>
+        <span>•</span>
+        <a href="index.html">Home</a>
+        <span>•</span>
+        <a href="territorio/index.html">Portale Territorio</a>
+        <span>•</span>
+        <a href="immobili/index.html">Bacheca Immobili</a>
+        <span>•</span>
+        <a href="privacy.html">Privacy e Cookie Policy</a>
+        <span>•</span>
+        <a href="termini.html">Termini d'Uso</a>
+        <span>•</span>
+        <a href="contatti.html">Contatti / Segnalazioni</a>
+      </div>
+
+      <div class="season-tester">
+        <span>Test Stagione:</span>
+        <button onclick="applySeason('autunno')">Autunno</button>
+        <button onclick="applySeason('inverno')">Inverno</button>
+        <button onclick="applySeason('primavera')">Primavera</button>
+        <button onclick="applySeason('estate')">Estate</button>
+      </div>
+    </div>
+  </footer>
+<div id="auth-modal" class="modal-backdrop" onclick="if(event.target===this) closeAuthModal()">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3 id="auth-modal-title">Registrati / Iscriviti</h3>
+        <button onclick="closeAuthModal()" class="modal-close" aria-label="Chiudi">✕</button>
+      </div>
+
+      <div id="auth-logged-box" style="display:none; flex-direction:column; gap:12px;">
+        <p style="font-size:13px; color:var(--text-muted);">Sei connesso come <strong id="logged-nick-display" style="color:var(--accent);"></strong>. La tua email resta privata e non viene mai mostrata negli annunci.</p>
+        <button type="button" onclick="logoutUser()" class="modal-submit" style="background-color:var(--bg-subtle); color:var(--text-main);">Esci dall'account</button>
+      </div>
+
+      <div id="auth-forms-wrapper">
+        <div class="tab-switch">
+          <button id="tab-register" type="button" class="tab-btn active" onclick="switchAuthTab('register')">Registrati / Iscriviti</button>
+          <button id="tab-login" type="button" class="tab-btn" onclick="switchAuthTab('login')">Accedi (Login)</button>
+        </div>
+
+        <form id="form-register" class="modal-form" onsubmit="handleRegister(event)">
+          <div>
+            <label class="field-lbl" for="reg-nick">Nickname (pubblico sugli annunci, anche inventato)</label>
+            <input id="reg-nick" type="text" class="modal-input" placeholder="Es. MarcoSommelier99" required />
+          </div>
+          <div>
+            <label class="field-lbl" for="reg-realname">Nome vero (privato, solo per gestione account)</label>
+            <input id="reg-realname" type="text" class="modal-input" placeholder="Es. Marco Rossi" required />
+          </div>
+          <div>
+            <label class="field-lbl" for="reg-email">Email (privata, mai visibile agli altri utenti)</label>
+            <input id="reg-email" type="email" class="modal-input" placeholder="nome@esempio.it" required />
+          </div>
+          <div>
+            <label class="field-lbl" for="reg-pass">Password</label>
+            <input id="reg-pass" type="password" class="modal-input" placeholder="Crea una password" required />
+          </div>
+          <label class="check-row">
+            <input id="reg-privacy" type="checkbox" required />
+            <span>Ho letto l'<a href="privacy.html" target="_blank">Informativa Privacy e Cookie</a> e accetto i <a href="termini.html" target="_blank">Termini d'Uso</a> di gengis.it.</span>
+          </label>
+          <label class="check-row">
+            <input id="reg-newsletter" type="checkbox" />
+            <span>Acconsento a ricevere aggiornamenti anche sugli altri servizi e novità di gengis.it.</span>
+          </label>
+          <button type="submit" class="modal-submit">Crea account e ottieni Nickname →</button>
+        </form>
+
+        <form id="form-login" class="modal-form" style="display:none;" onsubmit="handleLogin(event)">
+          <div>
+            <label class="field-lbl" for="log-email">Email</label>
+            <input id="log-email" type="email" class="modal-input" placeholder="nome@esempio.it" required />
+          </div>
+          <div>
+            <label class="field-lbl" for="log-pass">Password</label>
+            <input id="log-pass" type="password" class="modal-input" placeholder="La tua password" required />
+          </div>
+          <button type="submit" class="modal-submit">Accedi subito →</button>
+        </form>
+      </div>
+    </div>
+  </div>
+<script>
+    const seasonalData = {
+      autunno: {
+        badge: "Autunno • Hub Attivo",
+        bgPageLight: "#FAF6F0",
+        bgPageDark: "#141210",
+        accent: "#B45309",
+        accentSoft: "rgba(180, 83, 9, 0.13)"
+      },
+      inverno: {
+        badge: "Inverno • Hub Attivo",
+        bgPageLight: "#F3F6FA",
+        bgPageDark: "#0F1318",
+        accent: "#0369A1",
+        accentSoft: "rgba(3, 105, 161, 0.13)"
+      },
+      primavera: {
+        badge: "Primavera • Hub Attivo",
+        bgPageLight: "#F2F8F4",
+        bgPageDark: "#101713",
+        accent: "#15803D",
+        accentSoft: "rgba(21, 128, 61, 0.13)"
+      },
+      estate: {
+        badge: "Estate • Hub Attivo",
+        bgPageLight: "#FFF8F1",
+        bgPageDark: "#18120E",
+        accent: "#EA580C",
+        accentSoft: "rgba(234, 88, 12, 0.13)"
+      }
+    };
+
+    let currentSeasonKey = localStorage.getItem('gengis-season') || detectCurrentSeason();
+
+    function detectCurrentSeason() {
+      const now = new Date();
+      const m = now.getMonth() + 1;
+      const d = now.getDate();
+      if ((m === 3 && d >= 20) || m === 4 || m === 5 || (m === 6 && d < 21)) return 'primavera';
+      if ((m === 6 && d >= 21) || m === 7 || m === 8 || (m === 9 && d < 23)) return 'estate';
+      if ((m === 9 && d >= 23) || m === 10 || m === 11 || (m === 12 && d < 21)) return 'autunno';
+      return 'inverno';
+    }
+
+    function applySeason(seasonKey) {
+      currentSeasonKey = seasonKey;
+      localStorage.setItem('gengis-season', seasonKey);
+      const data = seasonalData[seasonKey];
+      const isDark = document.documentElement.classList.contains('dark');
+      const root = document.documentElement;
+
+      root.style.setProperty('--bg-page', isDark ? data.bgPageDark : data.bgPageLight);
+      root.style.setProperty('--accent', data.accent);
+      root.style.setProperty('--accent-soft', data.accentSoft);
+
+      document.getElementById('season-badge').textContent = data.badge;
+    }
+
+    const themeBtn = document.getElementById('theme-toggle');
+    const themeLabel = document.getElementById('theme-label');
+    const themeIcon = document.getElementById('theme-icon');
+
+    function updateThemeUI(isDark) {
+      const data = seasonalData[currentSeasonKey];
+      document.documentElement.style.setProperty('--bg-page', isDark ? data.bgPageDark : data.bgPageLight);
+      themeLabel.textContent = isDark ? 'Giorno' : 'Notte';
+      themeIcon.innerHTML = isDark
+        ? '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>'
+        : '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+    }
+
+    themeBtn.addEventListener('click', () => {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('gengis-theme', isDark ? 'dark' : 'light');
+      updateThemeUI(isDark);
+    });
+
+    function toggleHighlight(btn) {
+      const card = btn.closest('.service-card');
+      const isFeatured = card.dataset.featured === 'true';
+
+      if (isFeatured) {
+        card.dataset.featured = 'false';
+        card.classList.add('muted');
+        btn.textContent = '☆ Tralasciato';
+      } else {
+        card.dataset.featured = 'true';
+        card.classList.remove('muted');
+        btn.textContent = '★ In evidenza';
+      }
+    }
+
+    function filterHub(mode, btn) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      document.querySelectorAll('.hub-item').forEach(item => {
+        if (mode === 'all') {
+          item.style.display = 'flex';
+        } else if (mode === 'evidenza') {
+          item.style.display = (item.dataset.featured === 'true') ? 'flex' : 'none';
+        } else if (mode === 'immobili') {
+          item.style.display = (item.dataset.module === 'immobili') ? 'flex' : 'none';
+        }
+      });
+    }
+function getCurrentUser() {
+      const raw = localStorage.getItem('gengis-user');
+      return raw ? JSON.parse(raw) : null;
+    }
+
+    function updateAuthUI() {
+      const user = getCurrentUser();
+      const btn = document.getElementById('auth-nav-btn');
+      if (user) {
+        btn.textContent = `@${user.nickname}`;
+      } else {
+        btn.textContent = 'Registrati / Accedi';
+      }
+    }
+
+    function openAuthModal(tab = 'register') {
+      const user = getCurrentUser();
+      const loggedBox = document.getElementById('auth-logged-box');
+      const formsWrapper = document.getElementById('auth-forms-wrapper');
+      const title = document.getElementById('auth-modal-title');
+
+      if (user) {
+        title.textContent = 'Il tuo Account';
+        document.getElementById('logged-nick-display').textContent = '@' + user.nickname;
+        loggedBox.style.display = 'flex';
+        formsWrapper.style.display = 'none';
+      } else {
+        loggedBox.style.display = 'none';
+        formsWrapper.style.display = 'block';
+        switchAuthTab(tab);
+      }
+      document.getElementById('auth-modal').classList.add('open');
+    }
+
+    function closeAuthModal() {
+      document.getElementById('auth-modal').classList.remove('open');
+    }
+
+    function switchAuthTab(tab) {
+      document.getElementById('tab-register').classList.toggle('active', tab === 'register');
+      document.getElementById('tab-login').classList.toggle('active', tab === 'login');
+      document.getElementById('form-register').style.display = tab === 'register' ? 'flex' : 'none';
+      document.getElementById('form-login').style.display = tab === 'login' ? 'flex' : 'none';
+      document.getElementById('auth-modal-title').textContent = tab === 'register' ? 'Registrati / Iscriviti' : 'Accedi al tuo Account';
+    }
+
+    function handleRegister(e) {
+      e.preventDefault();
+      const nickname = document.getElementById('reg-nick').value.trim().replace(/^@/, '');
+      const realName = document.getElementById('reg-realname').value.trim();
+      const email = document.getElementById('reg-email').value.trim();
+      const password = document.getElementById('reg-pass').value;
+      const newsletter = document.getElementById('reg-newsletter').checked;
+
+      const user = { nickname, realName, email, password, newsletter };
+      localStorage.setItem('gengis-user', JSON.stringify(user));
+      localStorage.setItem('gengis-registered-account', JSON.stringify(user));
+      updateAuthUI();
+      closeAuthModal();
+    }
+
+    function handleLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('log-email').value.trim();
+      const pass = document.getElementById('log-pass').value;
+      const saved = localStorage.getItem('gengis-registered-account');
+      if (saved) {
+        const acc = JSON.parse(saved);
+        if (acc.email === email && acc.password === pass) {
+          localStorage.setItem('gengis-user', JSON.stringify(acc));
+          updateAuthUI();
+          closeAuthModal();
+          return;
+        }
+      }
+      const fallbackNick = email.split('@')[0];
+      const user = { nickname: fallbackNick, realName: fallbackNick, email, password: pass, newsletter: false };
+      localStorage.setItem('gengis-user', JSON.stringify(user));
+      updateAuthUI();
+      closeAuthModal();
+    }
+
+    function logoutUser() {
+      localStorage.removeItem('gengis-user');
+      updateAuthUI();
+      closeAuthModal();
+    }
+if (localStorage.getItem('gengis-theme') === 'dark') {
+      document.documentElement.classList.add('dark');
+    }
+    applySeason(currentSeasonKey);
+    updateThemeUI(document.documentElement.classList.contains('dark'));
+    updateAuthUI();
+  </script>
+</body>
+</html>
